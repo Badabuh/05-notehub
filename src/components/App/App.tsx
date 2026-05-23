@@ -3,7 +3,8 @@ import Modal from "../Modal/Modal";
 import NoteForm from "../NoteForm/NoteForm";
 import Pagination from "../Pagination/Pagination";
 import SearchBox from "../SearchBox/SearchBox";
-import { useNotes } from "../../services/noteService";
+import { useQuery } from "@tanstack/react-query";
+import { fetchNotes } from "../../services/noteService";
 import { useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 import Loading from "../Loading/Loading";
@@ -16,10 +17,14 @@ export default function App() {
   const [text, setText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { data, isLoading, isError } = useNotes({
-    search: text,
-    page: currentPage,
-    perPage: NOTES_PER_PAGE,
+  const { data, isLoading, isError } = useQuery({
+    queryKey: [
+      "notes",
+      { search: text, page: currentPage, perPage: NOTES_PER_PAGE },
+    ],
+    queryFn: () =>
+      fetchNotes({ search: text, page: currentPage, perPage: NOTES_PER_PAGE }),
+    placeholderData: undefined,
   });
   const pageCount = Math.max(data?.totalPages ?? 0, 1);
 
@@ -34,11 +39,13 @@ export default function App() {
     <div className={css.app}>
       <header className={css.toolbar}>
         <SearchBox onChange={handleSearchChange} />
-        <Pagination
-          pageCount={pageCount}
-          currentPage={currentPage}
-          onPageChange={setCurrentPage}
-        />
+        {data && typeof data.totalPages === "number" && data.totalPages > 1 && (
+          <Pagination
+            pageCount={pageCount}
+            currentPage={currentPage}
+            onPageChange={setCurrentPage}
+          />
+        )}
         <button className={css.button} onClick={() => setIsModalOpen(true)}>
           Create note +
         </button>
