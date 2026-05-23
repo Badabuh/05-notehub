@@ -1,0 +1,20 @@
+.wrapper {
+  margin-top: 24px;
+  padding: 14px 16px;
+  border: 1px solid #f1aeb5;
+  border-radius: 8px;
+  background-color: #f8d7da;
+}
+
+.title {
+  margin: 0 0 6px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #842029;
+}
+
+.message {
+  margin: 0;
+  font-size: 14px;
+  color: #842029;
+}
