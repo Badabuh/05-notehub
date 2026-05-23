@@ -1,8 +1,8 @@
 import css from "./NoteForm.module.css";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
-import { NOTE_TAGS } from "../types/note";
-import type { CreateNotePayload, NoteTag } from "../types/note";
+import { NOTE_TAGS } from "../../types/note";
+import type { CreateNotePayload, NoteTag } from "../../types/note";
 
 interface NoteFormValues {
   title: string;

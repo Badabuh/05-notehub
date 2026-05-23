@@ -1,5 +1,5 @@
 import css from "./Modal.module.css";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, type MouseEvent, type ReactNode } from "react";
 
 interface ModalProps {
   isOpen: boolean;
@@ -25,14 +25,22 @@ export default function Modal({ isOpen, children, onClose }: ModalProps) {
     return null;
   }
 
+  const handleBackdropClick = () => {
+    onClose?.();
+  };
+
+  const handleModalClick = (event: MouseEvent<HTMLDivElement>) => {
+    event.stopPropagation();
+  };
+
   return (
     <div
       className={css.backdrop}
       role="dialog"
       aria-modal="true"
-      onClick={onClose}
+      onClick={handleBackdropClick}
     >
-      <div className={css.modal} onClick={(event) => event.stopPropagation()}>
+      <div className={css.modal} onClick={handleModalClick}>
         {children}
       </div>
     </div>
