@@ -10,6 +10,7 @@ import { useDebouncedCallback } from "use-debounce";
 import Loading from "../Loading/Loading";
 import Error from "../Error/Error";
 import NoteList from "../NoteList/NoteList";
+import { keepPreviousData } from "@tanstack/react-query";
 
 const NOTES_PER_PAGE = 12;
 
@@ -24,7 +25,7 @@ export default function App() {
     ],
     queryFn: () =>
       fetchNotes({ search: text, page: currentPage, perPage: NOTES_PER_PAGE }),
-    placeholderData: undefined,
+    placeholderData: keepPreviousData,
   });
   const pageCount = Math.max(data?.totalPages ?? 0, 1);
 

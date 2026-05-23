@@ -23,6 +23,7 @@ export async function createNote(note: CreateNotePayload): Promise<Note> {
   return response.data;
 }
 
-export async function deleteNote(id: string): Promise<void> {
-  await apiClient.delete(`/notes/${id}`);
+export async function deleteNote(id: string): Promise<Note> {
+  const response = await apiClient.delete<Note>(`/notes/${id}`);
+  return response.data;
 }

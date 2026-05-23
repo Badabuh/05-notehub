@@ -37,6 +37,7 @@ export default function NoteForm({ onClose }: NoteFormProps) {
     mutationFn: (note: CreateNotePayload) => createNote(note),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["notes"] });
+      onClose();
     },
   });
 
@@ -46,13 +47,7 @@ export default function NoteForm({ onClose }: NoteFormProps) {
       content: values.content,
       tag: values.tag as NoteTag,
     };
-
-    createNoteMutation.mutate(payload, {
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["notes"] });
-        onClose();
-      },
-    });
+    createNoteMutation.mutate(payload);
   };
 
   return (
