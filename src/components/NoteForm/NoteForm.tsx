@@ -3,6 +3,7 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import { NOTE_TAGS } from "../../types/note";
 import type { CreateNotePayload, NoteTag } from "../../types/note";
+import { useCreateNote } from "../../services/noteService";
 
 interface NoteFormValues {
   title: string;
@@ -25,17 +26,31 @@ const noteValidationSchema = Yup.object({
 });
 
 interface NoteFormProps {
-  onSubmit: (values: CreateNotePayload) => void;
+  onClose: () => void;
 }
 
-export default function NoteForm({ onSubmit }: NoteFormProps) {
+export default function NoteForm({ onClose }: NoteFormProps) {
+  const createNoteMutation = useCreateNote();
+
+  const handleSubmit = (values: NoteFormValues) => {
+    const payload: CreateNotePayload = {
+      title: values.title,
+      content: values.content,
+      tag: values.tag as NoteTag,
+    };
+
+    createNoteMutation.mutate(payload, {
+      onSuccess: () => {
+        onClose();
+      },
+    });
+  };
+
   return (
     <Formik<NoteFormValues>
       initialValues={{ title: "", content: "", tag: "" }}
       validationSchema={noteValidationSchema}
-      onSubmit={({ title, content, tag }) => {
-        onSubmit({ title, content, tag: tag as NoteTag });
-      }}
+      onSubmit={handleSubmit}
     >
       <Form className={css.form}>
         <div className={css.formGroup}>
@@ -69,10 +84,14 @@ export default function NoteForm({ onSubmit }: NoteFormProps) {
           <ErrorMessage name="tag" component="span" className={css.error} />
         </div>
         <div className={css.actions}>
-          <button type="button" className={css.cancelButton}>
+          <button type="button" className={css.cancelButton} onClick={onClose}>
             Cancel
           </button>
-          <button type="submit" className={css.submitButton} disabled={false}>
+          <button
+            type="submit"
+            className={css.submitButton}
+            disabled={createNoteMutation.isPending}
+          >
             Create note
           </button>
         </div>

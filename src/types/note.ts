@@ -19,15 +19,4 @@ export interface Note {
 
 export type Notes = Note[];
 
-export interface NotesQueryParams {
-  search?: string;
-  page?: number;
-  perPage?: number;
-}
-
 export type CreateNotePayload = Omit<Note, "id" | "createdAt" | "updatedAt">;
-
-export interface NotesResponse {
-  notes: Notes;
-  totalPages: number;
-}

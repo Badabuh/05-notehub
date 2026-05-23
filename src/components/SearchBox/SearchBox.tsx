@@ -2,12 +2,12 @@ import type { ChangeEvent } from "react";
 import css from "./SearchBox.module.css";
 
 interface SearchBoxProps {
-  setState: (value: string) => void;
+  onChange: (value: string) => void;
 }
 
-export default function SearchBox({ setState }: SearchBoxProps) {
+export default function SearchBox({ onChange }: SearchBoxProps) {
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setState(event.target.value);
+    onChange(event.target.value);
   };
 
   return (

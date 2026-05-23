@@ -1,10 +1,6 @@
 import axios from "axios";
-import type {
-  CreateNotePayload,
-  Note,
-  NotesQueryParams,
-  NotesResponse,
-} from "../types/note";
+import type { CreateNotePayload, Note } from "../types/note";
+import type { NotesQueryParams, NotesResponse } from "../types/noteApi";
 import {
   keepPreviousData,
   useMutation,
@@ -29,12 +25,13 @@ async function fetchNotes(
 }
 
 async function createNote(note: CreateNotePayload): Promise<Note> {
-  const response = await apiClient.post("/notes", note);
+  const response = await apiClient.post<Note>("/notes", note);
   return response.data;
 }
 
-async function deleteNote(id: string): Promise<void> {
-  await apiClient.delete(`/notes/${id}`);
+async function deleteNote(id: string): Promise<Note> {
+  const response = await apiClient.delete<Note>(`/notes/${id}`);
+  return response.data;
 }
 
 export function useNotes(value: NotesQueryParams) {
